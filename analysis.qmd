@@ -1,0 +1,42 @@
+---
+title: "Seguro Popular Analysis"
+author: "Health Policy Analyst"
+format: html
+execute:
+  echo: false
+---
+
+Evaluating public health insurance programs is essential for understanding whether safety-net policies effectively protect uninsured families from financial hardship. Using household survey data from Mexico's Seguro Popular experiment, we examine whether enrolling in public health insurance reduces out-of-pocket medical expenditure over a three-month period.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(primer.data)
+```
+
+```{r}
+#| cache: true
+x <- sps |> 
+  select(treatment, t2_health_exp_3m, age, sex, education) |> 
+  drop_na() |> 
+  mutate(treatment = factor(if_else(treatment == 1, "Enrolled", "Not enrolled"),
+                            levels = c("Not enrolled", "Enrolled")))
+```
+
+```{r}
+ggplot(x, aes(x = treatment, y = t2_health_exp_3m)) +
+  geom_jitter(alpha = 0.2, width = 0.2) +
+  stat_summary(fun = mean, geom = "point", color = "red", size = 3) +
+  coord_cartesian(ylim = c(0, 5000)) +
+  labs(
+    x = "Treatment Status",
+    y = "Out-of-Pocket Spending (Pesos, 3 Months)",
+    title = "Out-of-Pocket Health Spending by Treatment Group"
+  )
+```
+
+```{r}
+x |> count(treatment)
+```
+
+

@@ -6,7 +6,8 @@ execute:
   echo: false
 ---
 
-Evaluating public health insurance programs is essential for understanding whether safety-net policies effectively protect uninsured families from financial hardship. Using household survey data from Mexico's Seguro Popular experiment, we examine whether enrolling in public health insurance reduces out-of-pocket medical expenditure over a three-month period.However, a key limitation of our model is that heavy-tailed health expenditure data with extreme outliers can disproportionately skew mean effect estimates
+Evaluating public health insurance programs is essential for understanding whether safety-net policies effectively protect uninsured families from financial hardship. Using household survey data from Mexico's Seguro Popular experiment, we examine whether enrolling in public health insurance reduces out-of-pocket medical expenditure over a three-month period. We model three-month out-of-pocket health spending as a linear function of household enrollment status in Seguro Popular. However, a key limitation of our model is that heavy-tailed health expenditure data with extreme outliers can disproportionately skew mean effect estimates.
+
 
 ```{r}
 #| message: false
@@ -14,6 +15,7 @@ library(tidyverse)
 library(primer.data)
 library(tidymodels)
 library(broom)
+library(gt)
 ```
 
 ```{r}
@@ -46,6 +48,12 @@ x |> count(treatment)
 fit_sp <- linear_reg(engine = "lm") |> 
   fit(t2_health_exp_3m ~ treatment, data = x)
 ```
+
+```{r}
+tidy(fit_sp, conf.int = TRUE) |> 
+  gt()
+```
+
 
 
 

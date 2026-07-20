@@ -41,4 +41,11 @@ ggplot(x, aes(x = treatment, y = t2_health_exp_3m)) +
 x |> count(treatment)
 ```
 
+```{r}
+#|cache: true
+fit_sp <- linear_reg(engine = "lm") |> 
+  fit(t2_health_exp_3m ~ treatment, data = x)
+```
+
+
 
